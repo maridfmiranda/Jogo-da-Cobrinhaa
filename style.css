@@ -1,0 +1,27 @@
+body{
+    height: 66vh;           
+    width: 95;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(255, 170, 218);
+
+}
+
+h1 {  
+    color: rgb(255, 87, 182);
+    font-family: sans-serif;
+    font-style: italic;
+    font-size: 50px;
+ }
+
+button {
+    border-radius: 50px;
+    color: rgb(255, 87, 182);
+    height: 100px;
+    width: 250px;
+    font-size: 40px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 50px;
+}
