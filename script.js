@@ -18,8 +18,6 @@ if (true){
 }
 console.log(y); */
 
-
-
 let canvas = document.getElementById("snake");          //desenho
 let contexto = canvas.getContext("2d");
 let caixa = 32; 
@@ -33,25 +31,19 @@ snake[0] = {
 let direcao = "direita";
 
 let comida = {                   //Math.floor: floor: arrendonda pro número de "baixo"
-    x: Math.floor(Math.random() * 15 + 1) *caixa,     //número aleatório entre 1 e 15, quase 36
+    x: Math.floor(Math.random() * 15 + 1) * caixa,     //número aleatório entre 1 e 15, quase 36
     y: Math.floor(Math.random() * 15 + 1) * caixa
 }
  
-function criarFundo(  ) {
+function criarFundo() {
     contexto.fillStyle = "rgb(255, 87, 182)";  //preenche o estilo com tal cor
     contexto.fillRect(0, 0, 16 * caixa, 16 * caixa);
-
-    //contexto.fillRect() = desenha um retangulo preenchido no canvas
-    //contexto.fillRect(coordenada x, coordenada y, largura, altura)
-
 }
 
-criarFundo(); 
-
-function criarCobrinha() {       //"length": conta/coloca o tamanho
+function criarCobrinha() {
     for (i=0; i < snake.length; i++){
         contexto.fillStyle = "white";
-        contexto.fillRect (snake[i].x, snake[i].y, caixa, caixa);
+        contexto.fillRect(snake[i].x, snake[i].y, caixa, caixa);
     }
 }
 
@@ -68,6 +60,37 @@ function atualizarDirecao(evento){     // keyCode - código da tecla
     if (evento.keyCode == 39 && direcao != 'esquerda') direcao = 'direita'
     if (evento.keyCode == 40 && direcao != 'cima') direcao = 'baixo'
 }
+
+// Adicionando controle por toque (swipe)
+let startX, startY;
+
+window.addEventListener('touchstart', function(e) {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+}, false);
+
+window.addEventListener('touchend', function(e) {
+    const touch = e.changedTouches[0];
+    let deltaX = touch.clientX - startX;
+    let deltaY = touch.clientY - startY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Movimento horizontal
+        if (deltaX > 30 && direcao != 'esquerda') {
+            direcao = 'direita';
+        } else if (deltaX < -30 && direcao != 'direita') {
+            direcao = 'esquerda';
+        }
+    } else {
+        // Movimento vertical
+        if (deltaY > 30 && direcao != 'cima') {
+            direcao = 'baixo';
+        } else if (deltaY < -30 && direcao != 'baixo') {
+            direcao = 'cima';
+        }
+    }
+}, false);
 
 function reiniciarJogo() {
     // Resetar o estado do jogo
@@ -90,13 +113,11 @@ function reiniciarJogo() {
 }
 
 function iniciarJogo() {
-//teletransportar a cobra ao ultrapassar as bordas
     if (snake[0].x > 15 * caixa && direcao == 'direita') snake[0].x=0;
     if (snake[0].x < 0 * caixa && direcao == 'esquerda') snake[0].x= 16 * caixa;
     if (snake[0].y > 15 * caixa && direcao == 'baixo') snake[0].y=0;
     if (snake[0].y < 0 && direcao == 'cima') snake[0].y=16 * caixa;
 
-// verifificar a colisão da cabeça com o corpo
     for (let i = 1; i < snake.length; i++){
         if (snake[0].x== snake[i].x && snake [0].y == snake[i].y){
             clearInterval(jogo);
@@ -129,4 +150,4 @@ function iniciarJogo() {
     snake.unshift(novaCabeca);
 }
 
-let jogo = setInterval(iniciarJogo, 100);
+let jogo = setInterval(iniciarJogo, 80);
